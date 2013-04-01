@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'gem_config/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = 'GemConfig'
+  gem.name          = 'gem_config'
   gem.version       = GemConfig::VERSION
   gem.platform      = Gem::Platform::RUBY
   gem.authors       = ['Manuel Meurer']
