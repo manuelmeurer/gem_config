@@ -23,7 +23,54 @@ Or install it yourself as:
 
 ## Usage
 
-## TODO
+### As a gem author
+
+Include the gem and add configuration options like this:
+
+```ruby
+# awesomeness.gemspec
+Gem::Specification.new do |gem|
+  ...
+  gem.add_runtime_dependency 'gem_config'
+end
+
+# lib/awesomeness.rb
+module Awesomeness
+  include GemConfig::Base
+
+  with_configuration do
+    has :api_key, classes: String
+    has :format, values: [:json, :xml], default: :json
+    has :region, values: ['us-west', 'us-east', 'eu'], default: 'us-west'
+  end
+end
+```
+
+Access the configuration values in the gem's code like this:
+
+```ruby
+Awesomeness.configuration.api_key # Whatever the user set
+```
+
+### As a gem user
+
+Include and configure a gem like this:
+
+```ruby
+# Gemfile
+gem 'awesomeness'
+
+# config/initializers/awesomeness.rb
+Awesomeness.configure do |config|
+  config.api_key = 'foobarbaz'
+  config.format  = :xml
+  config.region  = 'eu'
+end
+# or
+Awesomeness.configuration.api_key = 'foobarbaz'
+```
+
+Of course configuration values are checked against the allowed `classes` and `values`, and the `default` is used if no value is provided.
 
 ## Contributing
 
