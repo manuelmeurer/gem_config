@@ -10,17 +10,17 @@ module GemConfig
       end
 
       def configuration
-        @configuration ||= Configuration.new(configuration_rules)
+        @configuration ||= Configuration.new(rules)
       end
 
       def with_configuration(&block)
-        configuration_rules.instance_eval(&block)
+        rules.instance_eval(&block)
       end
 
       private
 
-      def configuration_rules
-        @configuration_rules ||= ConfigurationRules.new
+      def rules
+        @rules ||= Rules.new
       end
     end
   end
