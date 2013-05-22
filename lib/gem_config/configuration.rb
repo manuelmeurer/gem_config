@@ -12,7 +12,7 @@ module GemConfig
 
     def reset
       self.rules.keys.each do |key|
-        set key, nil
+        unset key
       end
     end
 
@@ -29,12 +29,21 @@ module GemConfig
 
     private
 
+    def unset(key)
+      remove_instance_variable "@#{key}" if instance_variable_defined?("@#{key}")
+    end
+
     def set(key, value)
-      self.instance_variable_set "@#{key}", value
+      self.rules.check(key, value)
+      instance_variable_set "@#{key}", value
     end
 
     def get(key)
-      self.instance_variable_get("@#{key}") || self.rules[key.to_sym][:default]
+      if instance_variable_defined?("@#{key}")
+        instance_variable_get "@#{key}"
+      else
+        self.rules[key.to_sym][:default]
+      end
     end
   end
 end

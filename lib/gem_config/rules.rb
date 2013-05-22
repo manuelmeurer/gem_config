@@ -2,9 +2,23 @@ require 'active_support/core_ext/hash/keys'
 
 module GemConfig
   class Rules < Hash
+    InvalidKeyError = Class.new(StandardError)
+
     def has(key, attrs = {})
       check_attributes attrs
       self[key.to_sym] = attrs
+    end
+
+    def check(key, value)
+      error_message = case
+      when !self.has_key?(key.to_sym)
+        'no rule found'
+      when self[key.to_sym].has_key?(:classes) && Array(self[key.to_sym][:classes]).none? { |klass| value.is_a?(klass) }
+        "must be an instance of one of the following classes: #{Array(self[key.to_sym][:classes]).join(', ')}"
+      when self[key.to_sym].has_key?(:values) && !Array(self[key.to_sym][:values]).include?(value)
+        "must be one of the following values: #{Array(self[key.to_sym][:values]).join(', ')}"
+      end
+      raise InvalidKeyError, "#{value} is not a valid value for #{key}: #{error_message}" unless error_message.nil?
     end
 
     private

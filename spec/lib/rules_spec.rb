@@ -109,4 +109,40 @@ describe GemConfig::Rules do
       end
     end
   end
+
+  describe '#check' do
+    it "raises an error if the value is not set as a rule" do
+      expect do
+        subject.check :foo, 1
+      end.to raise_error(GemConfig::Rules::InvalidKeyError)
+    end
+
+    it "raises an error if :classes are defined the the value's class is not included in them" do
+      subject.has :foo, classes: String
+      expect do
+        subject.check :foo, 1
+      end.to raise_error(GemConfig::Rules::InvalidKeyError)
+    end
+
+    it 'raises an error if :values are defined the the value is not included in them' do
+      subject.has :foo, values: ['foo', 'bar']
+      expect do
+        subject.check :foo, 'baz'
+      end.to raise_error(GemConfig::Rules::InvalidKeyError)
+    end
+
+    it "does not raise an error if :classes are defined the the value's class is included in them" do
+      subject.has :foo, classes: [String, Numeric]
+      expect do
+        subject.check :foo, 1
+      end.to_not raise_error(GemConfig::Rules::InvalidKeyError)
+    end
+
+    it 'does not raise an error if :values are defined the the value is included in them' do
+      subject.has :foo, values: ['foo', 'bar']
+      expect do
+        subject.check :foo, 'foo'
+      end.to_not raise_error(GemConfig::Rules::InvalidKeyError)
+    end
+  end
 end
