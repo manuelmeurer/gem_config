@@ -7,20 +7,6 @@
 
 A nifty way to make your gem configurable.
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'gem_config'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install gem_config
-
 ## Usage
 
 ### As a gem author
