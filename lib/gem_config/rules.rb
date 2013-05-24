@@ -52,7 +52,7 @@ module GemConfig
 
         if attrs.has_key?(:values)
           default_not_in_values = !Array(attrs[:values]).include?(attrs[:default])
-          raise ArgumentError, 'Value of :default parameter must have the type of one of the defined :classes.' if default_not_in_values
+          raise ArgumentError, 'Value of :default parameter must have the type of one of the defined :values.' if default_not_in_values
         end
       end
     end
