@@ -23,7 +23,7 @@ module GemConfig
 
     def check_attributes(attrs)
       attrs.each_key do |k|
-        raise(ArgumentError, "Unknown key: #{k}") unless [:classes, :values, :default].flatten.include?(k)
+        raise(ArgumentError, "Unknown key: #{k}") unless [:classes, :values, :default].include?(k)
       end
 
       if attrs.has_key?(:classes)
