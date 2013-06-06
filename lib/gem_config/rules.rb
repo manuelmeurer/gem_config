@@ -22,8 +22,9 @@ module GemConfig
     private
 
     def check_attributes(attrs)
-      attrs.each_key do |k|
-        raise(ArgumentError, "Unknown key: #{k}") unless [:classes, :values, :default].include?(k)
+      allowed_keys = [:classes, :values, :default]
+      attrs.keys.each do |k|
+        raise ArgumentError, %("#{k}" is not a valid attribute. Valid attributes are: #{allowed_keys.join(', ')}) unless allowed_keys.include?(k)
       end
 
       if attrs.has_key?(:classes)
