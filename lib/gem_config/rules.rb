@@ -1,5 +1,3 @@
-require 'active_support/core_ext/hash/keys'
-
 module GemConfig
   class Rules < Hash
     InvalidKeyError = Class.new(StandardError)
@@ -24,7 +22,9 @@ module GemConfig
     private
 
     def check_attributes(attrs)
-      attrs.assert_valid_keys :classes, :values, :default
+      attrs.each_key do |k|
+        raise(ArgumentError, "Unknown key: #{k}") unless [:classes, :values, :default].flatten.include?(k)
+      end
 
       if attrs.has_key?(:classes)
         other_than_class = Array(attrs[:classes]).any? do |value|
