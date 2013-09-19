@@ -21,6 +21,8 @@ Gem::Specification.new do |gem|
 end
 
 # lib/awesomeness.rb
+require 'gem_config'
+
 module Awesomeness
   include GemConfig::Base
 
