@@ -1,3 +1,5 @@
+require 'gem_config/version'
+
 module GemConfig
 end
 
