@@ -19,7 +19,9 @@ Gem::Specification.new do |gem|
   ...
   gem.add_runtime_dependency 'gem_config'
 end
+```
 
+```ruby
 # lib/awesomeness.rb
 require 'gem_config'
 
@@ -47,7 +49,9 @@ Include and configure a gem like this:
 ```ruby
 # Gemfile
 gem 'awesomeness'
+```
 
+```ruby
 # config/initializers/awesomeness.rb
 Awesomeness.configure do |config|
   config.api_key = 'foobarbaz'
