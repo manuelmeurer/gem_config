@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Gem config by krautcomputing</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Gem config</h1>
+        <p>A nifty way to make your gem configurable.</p>
+
+        <p class="view"><a href="https://github.com/krautcomputing/gem_config">View the Project on GitHub <small>krautcomputing/gem_config</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/krautcomputing/gem_config/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/krautcomputing/gem_config/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/krautcomputing/gem_config">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="gemconfig" class="anchor" href="#gemconfig"><span class="octicon octicon-link"></span></a>GemConfig</h1>
+
+<p><a href="http://badge.fury.io/rb/gem_config"><img src="https://badge.fury.io/rb/gem_config.png" alt="Gem Version"></a>
+<a href="http://travis-ci.org/krautcomputing/gem_config"><img src="https://secure.travis-ci.org/krautcomputing/gem_config.png" alt="Build Status"></a>
+<a href="https://gemnasium.com/krautcomputing/gem_config"><img src="https://gemnasium.com/krautcomputing/gem_config.png" alt="Dependency Status"></a>
+<a href="https://codeclimate.com/github/krautcomputing/gem_config"><img src="https://codeclimate.com/github/krautcomputing/gem_config.png" alt="Code Climate"></a></p>
+
+<p>A nifty way to make your gem configurable.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a name="as-a-gem-author" class="anchor" href="#as-a-gem-author"><span class="octicon octicon-link"></span></a>As a gem author</h3>
+
+<p>Include the gem and add configuration options like this:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="c1"># awesomeness.gemspec</span>
+<span class="ss">Gem</span><span class="p">:</span><span class="ss">:Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">gem</span><span class="o">|</span>
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="n">gem</span><span class="o">.</span><span class="n">add_runtime_dependency</span> <span class="s1">'gem_config'</span>
+<span class="k">end</span>
+</pre></div>
+
+<div class="highlight highlight-ruby"><pre><span class="c1"># lib/awesomeness.rb</span>
+<span class="nb">require</span> <span class="s1">'gem_config'</span>
+
+<span class="k">module</span> <span class="nn">Awesomeness</span>
+  <span class="kp">include</span> <span class="ss">GemConfig</span><span class="p">:</span><span class="ss">:Base</span>
+
+  <span class="n">with_configuration</span> <span class="k">do</span>
+    <span class="n">has</span> <span class="ss">:api_key</span><span class="p">,</span> <span class="ss">classes</span><span class="p">:</span> <span class="nb">String</span>
+    <span class="n">has</span> <span class="ss">:format</span><span class="p">,</span> <span class="ss">values</span><span class="p">:</span> <span class="o">[</span><span class="ss">:json</span><span class="p">,</span> <span class="ss">:xml</span><span class="o">]</span><span class="p">,</span> <span class="ss">default</span><span class="p">:</span> <span class="ss">:json</span>
+    <span class="n">has</span> <span class="ss">:region</span><span class="p">,</span> <span class="ss">values</span><span class="p">:</span> <span class="o">[</span><span class="s1">'us-west'</span><span class="p">,</span> <span class="s1">'us-east'</span><span class="p">,</span> <span class="s1">'eu'</span><span class="o">]</span><span class="p">,</span> <span class="ss">default</span><span class="p">:</span> <span class="s1">'us-west'</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p>Access the configuration values in the gem's code like this:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="no">Awesomeness</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">api_key</span> <span class="c1"># Whatever the user set</span>
+</pre></div>
+
+<h3>
+<a name="as-a-gem-user" class="anchor" href="#as-a-gem-user"><span class="octicon octicon-link"></span></a>As a gem user</h3>
+
+<p>Include and configure a gem like this:</p>
+
+<div class="highlight highlight-ruby"><pre><span class="c1"># Gemfile</span>
+<span class="n">gem</span> <span class="s1">'awesomeness'</span>
+</pre></div>
+
+<div class="highlight highlight-ruby"><pre><span class="c1"># config/initializers/awesomeness.rb</span>
+<span class="no">Awesomeness</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="s1">'foobarbaz'</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">format</span>  <span class="o">=</span> <span class="ss">:xml</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">region</span>  <span class="o">=</span> <span class="s1">'eu'</span>
+<span class="k">end</span>
+<span class="c1"># or</span>
+<span class="no">Awesomeness</span><span class="o">.</span><span class="n">configuration</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="s1">'foobarbaz'</span>
+</pre></div>
+
+<p>Of course configuration values are checked against the allowed <code>classes</code> and <code>values</code>, and the <code>default</code> is used if no value is provided.</p>
+
+<h2>
+<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ol>
+<li>Fork it</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/krautcomputing">krautcomputing</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
