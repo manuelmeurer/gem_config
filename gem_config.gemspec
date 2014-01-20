@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = GemConfig::VERSION
   gem.platform      = Gem::Platform::RUBY
   gem.authors       = ['Manuel Meurer']
-  gem.email         = 'manuel.meurer@gmail.com'
+  gem.email         = 'manuel@krautcomputing.com'
   gem.summary       = 'A nifty way to make your gem configurable.'
   gem.description   = 'A nifty way to make your gem configurable.'
   gem.homepage      = 'https://github.com/krautcomputing/gem_config'
