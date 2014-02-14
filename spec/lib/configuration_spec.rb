@@ -21,13 +21,13 @@ describe GemConfig::Configuration do
 
   describe '#current' do
     it 'returns the current configuration' do
-      subject.current.should eq(foo: 'pelle', count: 123, api_key: 'foobarbaz')
+      subject.current.should eq(foo: 'pelle', bar: nil, count: 123, api_key: 'foobarbaz')
     end
   end
 
   describe '#reset' do
     it 'resets the configuration' do
-      subject.tap(&:reset).current.should eq(foo: 'bar', count: nil, api_key: 'foobarbaz')
+      subject.tap(&:reset).current.should eq(foo: 'bar', bar: nil, count: nil, api_key: 'foobarbaz')
     end
   end
 
