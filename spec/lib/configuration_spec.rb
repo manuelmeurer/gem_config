@@ -44,11 +44,11 @@ describe GemConfig::Configuration do
     end
 
     it 'does not set the configuration option if the value is not allowed' do
-      subject.rules.stub(:check, with: [:foo, 'bar']).and_raise(GemConfig::Rules::InvalidKeyError)
+      subject.rules.stub(:check, with: [:foo, 'bar']).and_raise(GemConfig::InvalidKeyError)
       expect do
         begin
           subject.foo = 'bar'
-        rescue GemConfig::Rules::InvalidKeyError
+        rescue GemConfig::InvalidKeyError
         end
       end.to_not change { subject.foo }.from('bar')
     end

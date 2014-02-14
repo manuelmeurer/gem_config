@@ -1,7 +1,5 @@
 module GemConfig
   class Rules < Hash
-    InvalidKeyError = Class.new(StandardError)
-
     def has(key, attrs = {})
       check_attributes attrs
       self[key.to_sym] = attrs
