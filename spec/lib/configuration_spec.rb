@@ -4,6 +4,7 @@ describe GemConfig::Configuration do
   subject do
     GemConfig::Configuration.new.tap do |configuration|
       configuration.rules.has :foo, default: 'bar'
+      configuration.rules.has :bar
       configuration.rules.has :count
       configuration.rules.has :api_key, default: 'foobarbaz'
       configuration.foo   = 'pelle'
@@ -27,6 +28,28 @@ describe GemConfig::Configuration do
   describe '#reset' do
     it 'resets the configuration' do
       subject.tap(&:reset).current.should eq(foo: 'bar', count: nil, api_key: 'foobarbaz')
+    end
+  end
+
+  describe '#unset' do
+    context 'with an existing key' do
+      context 'when that key has not been set' do
+        it 'doesnt change anything' do
+          expect { subject.unset(:bar) }.to_not change { subject.bar }
+        end
+      end
+
+      context 'when that key has been set' do
+        it 'unsets the key' do
+          expect { subject.unset(:count) }.to change { subject.count }.from(123).to(nil)
+        end
+      end
+    end
+
+    context 'with a non-existing key' do
+      it 'raises an exception' do
+        expect { subject.unset(:pelle) }.to raise_error(GemConfig::InvalidKeyError)
+      end
     end
   end
 

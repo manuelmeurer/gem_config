@@ -16,6 +16,11 @@ module GemConfig
       end
     end
 
+    def unset(key)
+      raise InvalidKeyError, "#{key} is not a valid key." unless self.rules.keys.include?(key.to_sym)
+      remove_instance_variable "@#{key}" if instance_variable_defined?("@#{key}")
+    end
+
     def method_missing(method, *args, &block)
       case
       when self.rules.keys.include?(method.to_sym)
@@ -28,10 +33,6 @@ module GemConfig
     end
 
     private
-
-    def unset(key)
-      remove_instance_variable "@#{key}" if instance_variable_defined?("@#{key}")
-    end
 
     def set(key, value)
       self.rules.check(key, value)
