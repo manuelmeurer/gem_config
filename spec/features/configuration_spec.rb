@@ -21,7 +21,7 @@ describe 'a module with configuration rules' do
       end
     end.to_not raise_error
 
-    subject.configuration.foo.should eq('bar')
-    subject.configuration.baz.should eq('ipsum')
+    expect(subject.configuration.foo).to eq('bar')
+    expect(subject.configuration.baz).to eq('ipsum')
   end
 end

@@ -6,6 +6,6 @@ describe GemConfig::Base do
       include GemConfig::Base
     end
 
-    m.should respond_to(:with_configuration)
+    expect(m).to respond_to(:with_configuration)
   end
 end
