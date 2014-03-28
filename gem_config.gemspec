@@ -22,4 +22,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '>= 0.9.0'
   gem.add_development_dependency 'rspec', '~> 3.0.0.beta2'
   gem.add_development_dependency 'guard-rspec', '~> 4.2'
+  # Listen >= 2.0.0 only works with Ruby >= 1.9.3
+  gem.add_development_dependency 'listen', '< 2.0.0' if RUBY_VERSION < '1.9.3'
 end
