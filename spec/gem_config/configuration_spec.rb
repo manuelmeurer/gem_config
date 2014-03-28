@@ -1,19 +1,35 @@
 require 'spec_helper'
 
+AfterConfigurationChangeReceived = Class.new(StandardError)
+
 describe GemConfig::Configuration do
+  let(:parent) {
+    Module.new do
+      include GemConfig::Base
+    end
+  }
   subject do
-    GemConfig::Configuration.new.tap do |configuration|
+    GemConfig::Configuration.new(parent).tap do |configuration|
       configuration.rules.has :all_allowed
       configuration.rules.has :foo_bar_allowed, values: %w(foo bar)
       configuration.rules.has :string_allowed, classes: String
-
       configuration.rules.has :foo, default: 'bar'
       configuration.rules.has :bar
       configuration.rules.has :count
       configuration.rules.has :api_key, default: 'foobarbaz'
+
       configuration.foo   = 'pelle'
       configuration.count = 123
+
       configuration
+    end
+  end
+
+  def set_after_configuration_change_received
+    parent.class_eval do
+      after_configuration_change do
+        raise AfterConfigurationChangeReceived
+      end
     end
   end
 
@@ -39,15 +55,7 @@ describe GemConfig::Configuration do
 
   describe '#reset' do
     it 'resets the configuration' do
-      expect(subject.tap(&:reset).current).to eq(
-        all_allowed:     nil,
-        foo_bar_allowed: nil,
-        string_allowed:  nil,
-        foo:             'bar',
-        bar:             nil,
-        count:           nil,
-        api_key:         'foobarbaz'
-      )
+      expect { subject.reset }.to change { [subject.foo, subject.count] }.from(['pelle', 123]).to(['bar', nil])
     end
   end
 
@@ -71,34 +79,34 @@ describe GemConfig::Configuration do
         expect { subject.unset(:pelle) }.to raise_error(GemConfig::InvalidKeyError)
       end
     end
+
+    context 'when a after_configuration_change block is present' do
+      before do
+        set_after_configuration_change_received
+      end
+
+      it 'calls that block after setting a new value' do
+        expect { subject.unset :count }.to raise_error(AfterConfigurationChangeReceived)
+      end
+    end
   end
 
   describe 'setting a configuration option' do
     context 'when all values and classes are allowed' do
       it 'sets the configuration option' do
-        expect do
-          subject.all_allowed = 'foo'
-        end.to change { subject.all_allowed }.from(nil).to('foo')
-        expect do
-          subject.all_allowed = 'bar'
-        end.to change { subject.all_allowed }.from('foo').to('bar')
+        expect { subject.all_allowed = 'foo' }.to change { subject.all_allowed }.from(nil).to('foo')
+        expect { subject.all_allowed = 'bar' }.to change { subject.all_allowed }.from('foo').to('bar')
       end
     end
 
     context 'when only certain values are allowed' do
       it 'sets the configuration option to those values' do
-        expect do
-          subject.foo_bar_allowed = 'foo'
-        end.to change { subject.foo_bar_allowed }.from(nil).to('foo')
-        expect do
-          subject.foo_bar_allowed = 'bar'
-        end.to change { subject.foo_bar_allowed }.from('foo').to('bar')
+        expect { subject.foo_bar_allowed = 'foo' }.to change { subject.foo_bar_allowed }.from(nil).to('foo')
+        expect { subject.foo_bar_allowed = 'bar' }.to change { subject.foo_bar_allowed }.from('foo').to('bar')
       end
 
       it 'raises an error when for other values' do
-        expect do
-          subject.foo_bar_allowed = 'pelle'
-        end.to raise_error(GemConfig::InvalidKeyError)
+        expect { subject.foo_bar_allowed = 'pelle' }.to raise_error(GemConfig::InvalidKeyError)
       end
 
       it "doesn't set the configuration option for other values" do
@@ -113,18 +121,12 @@ describe GemConfig::Configuration do
 
     context 'when only certain classes are allowed' do
       it 'sets the configuration option to those classes' do
-        expect do
-          subject.string_allowed = 'foo'
-        end.to change { subject.string_allowed }.from(nil).to('foo')
-        expect do
-          subject.string_allowed = 'bar'
-        end.to change { subject.string_allowed }.from('foo').to('bar')
+        expect { subject.string_allowed = 'foo' }.to change { subject.string_allowed }.from(nil).to('foo')
+        expect { subject.string_allowed = 'bar' }.to change { subject.string_allowed }.from('foo').to('bar')
       end
 
       it 'raises an error when for other values' do
-        expect do
-          subject.string_allowed = 1
-        end.to raise_error(GemConfig::InvalidKeyError)
+        expect { subject.string_allowed = 1 }.to raise_error(GemConfig::InvalidKeyError)
       end
 
       it "doesn't set the configuration option for other values" do
@@ -134,6 +136,16 @@ describe GemConfig::Configuration do
           rescue GemConfig::InvalidKeyError
           end
         end.to_not change { subject.string_allowed }
+      end
+    end
+
+    context 'when a after_configuration_change block is present' do
+      before do
+        set_after_configuration_change_received
+      end
+
+      it 'calls that block after setting a new value' do
+        expect { subject.all_allowed = 'foo' }.to raise_error(AfterConfigurationChangeReceived)
       end
     end
   end

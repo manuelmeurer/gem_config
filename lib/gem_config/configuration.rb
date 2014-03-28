@@ -1,5 +1,9 @@
 module GemConfig
   class Configuration
+    def initialize(parent = nil)
+      @parent = parent
+    end
+
     def rules
       @rules ||= Rules.new
     end
@@ -19,6 +23,7 @@ module GemConfig
     def unset(key)
       raise InvalidKeyError, "#{key} is not a valid key." unless self.rules.keys.include?(key.to_sym)
       remove_instance_variable "@#{key}" if instance_variable_defined?("@#{key}")
+      call_after_configuration_change
     end
 
     def method_missing(method, *args, &block)
@@ -28,7 +33,7 @@ module GemConfig
       when (match = method.to_s.match(/\A(?<key>\w+)=\z/)) && self.rules.keys.include?(match[:key].to_sym)
         set match[:key], args.first
       else
-        super method, *args, block
+        super
       end
     end
 
@@ -37,6 +42,7 @@ module GemConfig
     def set(key, value)
       self.rules.check(key, value)
       instance_variable_set "@#{key}", value
+      call_after_configuration_change
     end
 
     def get(key)
@@ -44,6 +50,13 @@ module GemConfig
         instance_variable_get "@#{key}"
       else
         self.rules[key.to_sym][:default]
+      end
+    end
+
+    def call_after_configuration_change
+      unless @parent.nil?
+        after_configuration_change = @parent.instance_variable_get(:@after_configuration_change)
+        after_configuration_change.call unless after_configuration_change.nil?
       end
     end
   end

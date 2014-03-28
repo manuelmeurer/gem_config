@@ -10,11 +10,15 @@ module GemConfig
       end
 
       def configuration
-        @configuration ||= Configuration.new
+        @configuration ||= Configuration.new(self)
       end
 
       def with_configuration(&block)
         configuration.rules.instance_eval(&block)
+      end
+
+      def after_configuration_change(&block)
+        @after_configuration_change = block
       end
     end
   end
