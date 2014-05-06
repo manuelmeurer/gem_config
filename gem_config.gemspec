@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.name          = 'gem_config'
   gem.version       = GemConfig::VERSION
   gem.platform      = Gem::Platform::RUBY
-  gem.authors       = ['Manuel Meurer']
+  gem.author        = 'Manuel Meurer'
   gem.email         = 'manuel@krautcomputing.com'
   gem.summary       = 'A nifty way to make your gem configurable.'
   gem.description   = 'A nifty way to make your gem configurable.'
@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r(^(test|spec|features)/))
   gem.require_paths = ['lib']
 
-  gem.add_development_dependency 'rake', '>= 0.9.0'
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec', '~> 3.0.0.beta2'
   gem.add_development_dependency 'guard-rspec', '~> 4.2'
   # Listen >= 2.0.0 only works with Ruby >= 1.9.3
