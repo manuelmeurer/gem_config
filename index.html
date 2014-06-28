@@ -47,7 +47,7 @@
 <p>Include the gem and add configuration options like this:</p>
 
 <div class="highlight highlight-ruby"><pre><span class="c1"># awesomeness.gemspec</span>
-<span class="ss">Gem</span><span class="p">:</span><span class="ss">:Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">gem</span><span class="o">|</span>
+<span class="no">Gem</span><span class="o">::</span><span class="no">Specification</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">gem</span><span class="o">|</span>
   <span class="o">.</span><span class="n">.</span><span class="o">.</span>
   <span class="n">gem</span><span class="o">.</span><span class="n">add_runtime_dependency</span> <span class="s1">'gem_config'</span>
 <span class="k">end</span>
@@ -57,7 +57,7 @@
 <span class="nb">require</span> <span class="s1">'gem_config'</span>
 
 <span class="k">module</span> <span class="nn">Awesomeness</span>
-  <span class="kp">include</span> <span class="ss">GemConfig</span><span class="p">:</span><span class="ss">:Base</span>
+  <span class="kp">include</span> <span class="no">GemConfig</span><span class="o">::</span><span class="no">Base</span>
 
   <span class="n">with_configuration</span> <span class="k">do</span>
     <span class="n">has</span> <span class="ss">:api_key</span><span class="p">,</span> <span class="ss">classes</span><span class="p">:</span> <span class="nb">String</span>
