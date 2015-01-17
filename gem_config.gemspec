@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.email         = 'manuel@krautcomputing.com'
   gem.summary       = 'A nifty way to make your gem configurable.'
   gem.description   = 'A nifty way to make your gem configurable.'
-  gem.homepage      = 'https://github.com/krautcomputing/gem_config'
+  gem.homepage      = 'http://krautcomputing.github.io/gem_config'
   gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
