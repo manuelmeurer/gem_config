@@ -42,6 +42,20 @@ Access the configuration values in the gem's code like this:
 Awesomeness.configuration.api_key # Whatever the user set
 ```
 
+To execute something after the gem is configured:
+
+```ruby
+module Awesomeness
+  include GemConfig::Base
+  
+  # ...
+  
+  after_configuration_change do
+    # configure some other gem you're using, perhaps
+  end
+end
+```
+
 ### As a gem user
 
 Include and configure a gem like this:
