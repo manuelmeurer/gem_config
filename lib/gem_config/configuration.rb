@@ -43,13 +43,15 @@ module GemConfig
       self.rules.check(key, value)
       instance_variable_set "@#{key}", value
       call_after_configuration_change
+      value
     end
 
     def get(key)
-      if instance_variable_defined?("@#{key}")
+      case
+      when instance_variable_defined?("@#{key}")
         instance_variable_get "@#{key}"
-      else
-        self.rules[key.to_sym][:default]
+      when self.rules[key.to_sym].key?(:default)
+        set key, self.rules[key.to_sym][:default]
       end
     end
 
