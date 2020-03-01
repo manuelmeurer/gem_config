@@ -2,7 +2,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/gem_config.png)](http://badge.fury.io/rb/gem_config)
 [![Build Status](https://secure.travis-ci.org/manuelmeurer/gem_config.png)](http://travis-ci.org/manuelmeurer/gem_config)
-[![Code Climate](https://codeclimate.com/github/manuelmeurer/gem_config.png)](https://codeclimate.com/github/manuelmeurer/gem_config)
 
 A nifty way to make your gem configurable.
 
